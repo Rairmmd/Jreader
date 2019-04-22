@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
-    <dbname value="book" ></dbname>
+    <dbname value="book" />
 
-    <version value="1" ></version>
+    <version value="1" />
 
     <list>
-        <mapping class="com.example.jreader.database.BookCatalogue"></mapping>
-        <mapping class="com.example.jreader.database.BookList"></mapping>
-        <mapping class="com.example.jreader.database.BookMarks"></mapping>
+        <mapping class="com.example.jreader.database.BookCatalogue"/>
+        <mapping class="com.example.jreader.database.BookList"/>
+        <mapping class="com.example.jreader.database.BookMarks"/>
     </list>
 </litepal>
