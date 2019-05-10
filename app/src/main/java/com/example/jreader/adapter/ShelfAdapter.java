@@ -30,19 +30,20 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
     private Context mContex;
     private List<BookList> bilist;
     private static LayoutInflater inflater = null;
-    private String booKpath,bookname;
+    private String booKpath, bookname;
     private int mHidePosition = -1;
     private Typeface typeface;
     protected List<AsyncTask<Void, Void, Boolean>> myAsyncTasks = new ArrayList<AsyncTask<Void, Void, Boolean>>();
     private int[] firstLocation;
-    public ShelfAdapter (Context context,List<BookList> bilist){
+
+    public ShelfAdapter(Context context, List<BookList> bilist) {
         this.mContex = context;
         this.bilist = bilist;
-        typeface = Typeface.createFromAsset(mContex.getAssets(),"font/QH.ttf");
+        typeface = Typeface.createFromAsset(mContex.getAssets(), "font/QH.ttf");
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public ShelfAdapter (Context context){
+    public ShelfAdapter(Context context) {
         this.mContex = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -51,9 +52,9 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
     public int getCount() {
         // TODO Auto-generated method stub
 
-        if(bilist.size()<10){
+        if (bilist.size() < 10) {
             return 10; //背景书架的draw需要用到item的高度
-        }else{
+        } else {
 
             return bilist.size();
         }
@@ -83,50 +84,49 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
             viewHolder.deleteItem_IB = (ImageButton) contentView.findViewById(R.id.item_close_Im);
             contentView.setTag(viewHolder);
 
-            }
-             else {
+        } else {
             viewHolder = (ViewHolder) contentView.getTag();
-            }
+        }
 
-           if (bilist.size() == 0) {
-           //   viewHolder.view.setBackgroundResource(R.drawable.cover_default_new);
-              viewHolder.view.setClickable(false);
-              viewHolder.view.setVisibility(View.INVISIBLE);
-              viewHolder.deleteItem_IB.setVisibility(View.INVISIBLE);
+        if (bilist.size() == 0) {
+            //   viewHolder.view.setBackgroundResource(R.drawable.cover_default_new);
+            viewHolder.view.setClickable(false);
+            viewHolder.view.setVisibility(View.INVISIBLE);
+            viewHolder.deleteItem_IB.setVisibility(View.INVISIBLE);
 
-            } else {
-                if(bilist.size()>position){
+        } else {
+            if (bilist.size() > position) {
 
-                 //   viewHolder.view.setBackgroundResource(R.drawable.cover_default_new);
-                    final String fileName = bilist.get(position).getBookname();
-                    final String filePath = bilist.get(position).getBookpath();
-                    viewHolder.view.setText(fileName);
+                //   viewHolder.view.setBackgroundResource(R.drawable.cover_default_new);
+                final String fileName = bilist.get(position).getBookname();
+                final String filePath = bilist.get(position).getBookpath();
+                viewHolder.view.setText(fileName);
 
-                    if (DragGridView.getShowDeleteButton()) {
-                        viewHolder.deleteItem_IB.setVisibility(View.VISIBLE);
-                    }else {
-                        viewHolder.deleteItem_IB.setVisibility(View.INVISIBLE);
-                    }
-                    bookname = fileName;
-                    booKpath = filePath;
+                if (DragGridView.getShowDeleteButton()) {
+                    viewHolder.deleteItem_IB.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.deleteItem_IB.setVisibility(View.INVISIBLE);
+                }
+                bookname = fileName;
+                booKpath = filePath;
 
-                    if(position == mHidePosition){
-                        contentView.setVisibility(View.INVISIBLE);
-                    }else {
-                        contentView.setVisibility(View.VISIBLE);//DragGridView  解决复用问题
-
-                    }
-
-                }else {
-                 //   viewHolder.view.setBackgroundResource(R.drawable.cover_default_new);
-                    viewHolder.view.setClickable(false);
-                    viewHolder.deleteItem_IB.setClickable(false);
-                    viewHolder.view.setVisibility(View.GONE);
-                    viewHolder.deleteItem_IB.setVisibility(View.GONE);
+                if (position == mHidePosition) {
+                    contentView.setVisibility(View.INVISIBLE);
+                } else {
+                    contentView.setVisibility(View.VISIBLE);//DragGridView  解决复用问题
 
                 }
 
+            } else {
+                //   viewHolder.view.setBackgroundResource(R.drawable.cover_default_new);
+                viewHolder.view.setClickable(false);
+                viewHolder.deleteItem_IB.setClickable(false);
+                viewHolder.view.setVisibility(View.GONE);
+                viewHolder.deleteItem_IB.setVisibility(View.GONE);
+
             }
+
+        }
 
         return contentView;
     }
@@ -138,6 +138,7 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
 
     /**
      * Drag移动时item交换数据,并在数据库中更新交换后的位置数据
+     *
      * @param oldPosition
      * @param newPosition
      */
@@ -149,28 +150,28 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
         bookLists1 = DataSupport.findAll(BookList.class);
 
         int tempId = bookLists1.get(newPosition).getId();
-       // Log.d("oldposotion is",oldPosition+"");
-       // Log.d("newposotion is", newPosition + "");
-        if(oldPosition < newPosition){
-            for(int i=oldPosition; i<newPosition; i++){
+        // Log.d("oldposotion is",oldPosition+"");
+        // Log.d("newposotion is", newPosition + "");
+        if (oldPosition < newPosition) {
+            for (int i = oldPosition; i < newPosition; i++) {
                 //获得交换前的ID,必须是数据库的真正的ID，如果使用bilist获取id是错误的，因为bilist交换后id是跟着交换的
                 List<BookList> bookLists = new ArrayList<>();
                 bookLists = DataSupport.findAll(BookList.class);
                 int dataBasesId = bookLists.get(i).getId();
                 Collections.swap(bilist, i, i + 1);
 
-                updateBookPosition(i,dataBasesId, bilist);
+                updateBookPosition(i, dataBasesId, bilist);
 
             }
-        }else if(oldPosition > newPosition){
-            for(int i=oldPosition; i>newPosition; i--) {
+        } else if (oldPosition > newPosition) {
+            for (int i = oldPosition; i > newPosition; i--) {
                 List<BookList> bookLists = new ArrayList<>();
                 bookLists = DataSupport.findAll(BookList.class);
                 int dataBasesId = bookLists.get(i).getId();
 
                 Collections.swap(bilist, i, i - 1);
 
-                updateBookPosition(i,dataBasesId,bilist);
+                updateBookPosition(i, dataBasesId, bilist);
 
             }
         }
@@ -182,10 +183,11 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
 
     /**
      * 两个item数据交换结束后，把不需要再交换的item更新到数据库中
+     *
      * @param position
      * @param bookLists
      */
-    public void updateBookPosition (int position,int databaseId,List<BookList> bookLists) {
+    public void updateBookPosition(int position, int databaseId, List<BookList> bookLists) {
         BookList bookList = new BookList();
         BookList bookList1 = new BookList();
         String bookpath = bookLists.get(position).getBookpath();
@@ -194,11 +196,12 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
         bookList1.setBookname(bookname);
         //开线程保存改动的数据到数据库
         //使用litepal数据库框架update时每次只能update一个id中的一条信息，如果相同则不更新。
-        upDateBookToSqlite3(databaseId , bookList, bookList1);
+        upDateBookToSqlite3(databaseId, bookList, bookList1);
     }
 
     /**
      * 隐藏item
+     *
      * @param hidePosition
      */
     @Override
@@ -209,6 +212,7 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
 
     /**
      * 删除书本
+     *
      * @param deletePosition
      */
     @Override
@@ -217,7 +221,7 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
         String bookpath = bilist.get(deletePosition).getBookpath();
         DataSupport.deleteAll(BookList.class, "bookpath = ?", bookpath);
         bilist.remove(deletePosition);
-       // Log.d("删除的书本是", bookpath);
+        // Log.d("删除的书本是", bookpath);
 
         notifyDataSetChanged();
 
@@ -225,6 +229,7 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
 
     /**
      * Book打开后位置移动到第一位
+     *
      * @param openPosition
      */
     @Override
@@ -234,22 +239,22 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
         bookLists1 = DataSupport.findAll(BookList.class);
         int tempId = bookLists1.get(0).getId();
         BookList temp = bookLists1.get(openPosition);
-       // Log.d("setitem adapter ",""+openPosition);
-        if(openPosition!=0) {
-            for (int i = openPosition; i > 0 ; i--) {
+        // Log.d("setitem adapter ",""+openPosition);
+        if (openPosition != 0) {
+            for (int i = openPosition; i > 0; i--) {
                 List<BookList> bookListsList = new ArrayList<>();
                 bookListsList = DataSupport.findAll(BookList.class);
                 int dataBasesId = bookListsList.get(i).getId();
 
-               Collections.swap(bookLists1, i, i - 1);
-               updateBookPosition(i, dataBasesId, bookLists1);
+                Collections.swap(bookLists1, i, i - 1);
+                updateBookPosition(i, dataBasesId, bookLists1);
             }
 
             bookLists1.set(0, temp);
             updateBookPosition(0, tempId, bookLists1);
-            for (int j = 0 ;j<bookLists1.size();j++) {
+            for (int j = 0; j < bookLists1.size(); j++) {
                 String bookpath = bookLists1.get(j).getBookpath();
-              //  Log.d("移动到第一位",bookpath);
+                //  Log.d("移动到第一位",bookpath);
             }
         }
         notifyDataSetChanged();
@@ -266,11 +271,12 @@ public class ShelfAdapter extends BaseAdapter implements DragGridListener {
 
     /**
      * 数据库书本信息更新
-     * @param databaseId  要更新的数据库的书本ID
+     *
+     * @param databaseId 要更新的数据库的书本ID
      * @param bookList
      * @param bookList1
      */
-    public void upDateBookToSqlite3(final int databaseId,final BookList bookList,final BookList bookList1) {
+    public void upDateBookToSqlite3(final int databaseId, final BookList bookList, final BookList bookList1) {
 
         putAsyncTask(new AsyncTask<Void, Void, Boolean>() {
             @Override

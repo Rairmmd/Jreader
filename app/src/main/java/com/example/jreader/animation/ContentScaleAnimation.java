@@ -1,7 +1,6 @@
 package com.example.jreader.animation;
 
 import android.graphics.Matrix;
-import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
@@ -9,6 +8,7 @@ import android.view.animation.Transformation;
  * Created by Administrator on 2016/2/5.
  */
 public class ContentScaleAnimation extends Animation {
+
     private float mPivotX;
     private float mPivotY;
     private float mPivotXValue; // 控件左上角X
